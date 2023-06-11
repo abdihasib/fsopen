@@ -33,7 +33,7 @@ const generateId = () => {
     ? Math.max(...notes.map(n => n.id))
     : 0
   return maxId + 1
-}
+} 
 
 app.post('/api/notes', (request, response) => {
   const body = request.body
