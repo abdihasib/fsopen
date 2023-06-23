@@ -7,10 +7,6 @@ const PORT = process.env.PORT
 
 app.use(express.json())
 
-app.get('/', (req, res) => {
-  res.send('<h1>Hello World!</h1>')
-})
-
 app.get('/api/notes', (req, res) => {
   Note.find({}).then(result => {
     console.log(result)
