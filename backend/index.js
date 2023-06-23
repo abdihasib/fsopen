@@ -7,27 +7,9 @@ const PORT = process.env.PORT
 
 app.use(express.json())
 
-
-
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
-
-
-app.post('/api/notes', (request, response) => {
-  const body = request.body
-
-  const newNote = new Note({
-    content: body.content,
-    important: body.important || false,
-  })
-
-  newNote.save().then(result => {
-    console.log('note saved!')
-    response.json(result)
-  }).catch(error => next(error))
-})
-
 
 app.get('/api/notes', (req, res) => {
   Note.find({}).then(result => {
@@ -35,16 +17,6 @@ app.get('/api/notes', (req, res) => {
     res.json(result)
   })
 })
-
-
-app.delete('/api/notes/:id', (request, response, next) => {
-  Note.findByIdAndRemove(request.params.id)
-    .then(() => {
-      response.status(204).end()
-    })
-    .catch(error => next(error))
-})
-
 
 app.get('/api/notes/:id', (request, response, next) => {
   Note.findById(request.params.id).then(note => {
@@ -73,10 +45,31 @@ app.put('/api/notes/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+app.post('/api/notes', (request, response, next) => {
+  const body = request.body
+
+  const newNote = new Note({
+    content: body.content,
+    important: body.important || false,
+  })
+
+  newNote.save().then(result => {
+    console.log('note saved!')
+    response.json(result)
+  }).catch(error => next(error))
+})
+
+app.delete('/api/notes/:id', (request, response, next) => {
+  Note.findByIdAndRemove(request.params.id)
+    .then(() => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
+})
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
-
 // handler of requests with unknown endpoint
 app.use(unknownEndpoint)
 
