@@ -2,10 +2,13 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const Note = require('./models/note')
+const cors = require('cors')
 
 const PORT = process.env.PORT
 
+app.use(cors())
 app.use(express.json())
+app.use(express.static('build'))
 
 app.get('/api/notes', (req, res) => {
   Note.find({}).then(result => {
